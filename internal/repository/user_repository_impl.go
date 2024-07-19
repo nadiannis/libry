@@ -29,10 +29,11 @@ func (r *UserRepository) AddUser(user *domain.User) *domain.User {
 }
 
 func (r *UserRepository) GetUserByUsername(username string) (*domain.User, error) {
-	user, exists := r.db[username]
-	if !exists {
-		return nil, utils.ErrUserNotFound
+	for _, user := range r.db {
+		if user.Username == username {
+			return user, nil
+		}
 	}
 
-	return user, nil
+	return nil, utils.ErrUserNotFound
 }

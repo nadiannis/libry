@@ -16,16 +16,16 @@ func GetInput(scanner *bufio.Scanner, prompt string) string {
 
 func BookTable(data []*domain.Book) {
 	fmt.Printf("%-40s %-15s %-15s\n", "id", "title", "author")
-	fmt.Println(strings.Repeat("-", 70))
+	fmt.Println(strings.Repeat("-", 80))
 
 	for _, book := range data {
-		fmt.Printf("%-40s %-15s %-15s\n", book.ID, book.Title, book.Author)
+		fmt.Printf("%-40s %-15s %-25s\n", book.ID, book.Title, book.Author)
 	}
 }
 
 func UserTable(data []*domain.User) {
-	fmt.Printf("%-40s %-15s %-15s\n", "id", "username", "books")
-	fmt.Println(strings.Repeat("-", 70))
+	fmt.Printf("%-40s %-15s %-25s\n", "id", "username", "books")
+	fmt.Println(strings.Repeat("-", 80))
 
 	for _, user := range data {
 		fmt.Printf("%-40s %-15s %-15v\n", user.ID, user.Username, user.Books)

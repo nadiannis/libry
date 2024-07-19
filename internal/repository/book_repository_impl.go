@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/nadiannis/libry/internal/domain"
+	"github.com/nadiannis/libry/internal/utils"
 )
 
 type BookRepository struct {
@@ -30,7 +31,7 @@ func (r *BookRepository) AddBook(book *domain.Book) *domain.Book {
 func (r *BookRepository) GetBookByID(bookID string) (*domain.Book, error) {
 	book, exists := r.db[bookID]
 	if !exists {
-		return nil, ErrBookNotFound
+		return nil, utils.ErrBookNotFound
 	}
 
 	return book, nil

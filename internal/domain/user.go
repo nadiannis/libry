@@ -3,5 +3,5 @@ package domain
 type User struct {
 	ID       string
 	Username string
-	Books    []Book
+	Books    []*Book
 }

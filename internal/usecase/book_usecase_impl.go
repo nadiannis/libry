@@ -18,21 +18,21 @@ func NewBookUsecase(repository repository.IBookRepository) IBookUsecase {
 	}
 }
 
-func (r *BookUsecase) GetAllBooks() []*domain.Book {
-	return r.repository.GetAllBooks()
+func (u *BookUsecase) GetAllBooks() []*domain.Book {
+	return u.repository.GetAllBooks()
 }
 
-func (r *BookUsecase) AddBook(input *dto.BookInput) *domain.Book {
+func (u *BookUsecase) AddBook(input *dto.BookInput) *domain.Book {
 	book := &domain.Book{
 		ID:     uuid.NewString(),
 		Title:  input.Title,
 		Author: input.Author,
 	}
-	return r.repository.AddBook(book)
+	return u.repository.AddBook(book)
 }
 
-func (r *BookUsecase) GetBookByID(bookID string) (*domain.Book, error) {
-	book, err := r.repository.GetBookByID(bookID)
+func (u *BookUsecase) GetBookByID(bookID string) (*domain.Book, error) {
+	book, err := u.repository.GetBookByID(bookID)
 	if err != nil {
 		return nil, err
 	}

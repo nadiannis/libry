@@ -18,13 +18,13 @@ func NewBookHandler(usecase usecase.IBookUsecase) IBookHandler {
 	}
 }
 
-func (r *BookHandler) GetAllBooks(parts []string) {
+func (h *BookHandler) GetAllBooks(parts []string) {
 	if len(parts) != 1 {
 		fmt.Println(`input should be \lb`)
 		return
 	}
 
-	books := r.usecase.GetAllBooks()
+	books := h.usecase.GetAllBooks()
 	total := len(books)
 
 	fmt.Printf("total: %d\n", total)
@@ -37,7 +37,7 @@ func (r *BookHandler) GetAllBooks(parts []string) {
 	utils.BookTable(books)
 }
 
-func (r *BookHandler) AddBook(input *dto.BookInput) {
+func (h *BookHandler) AddBook(input *dto.BookInput) {
 	if input.Title == "" {
 		fmt.Println("title is required")
 		return
@@ -48,7 +48,7 @@ func (r *BookHandler) AddBook(input *dto.BookInput) {
 		return
 	}
 
-	savedBook := r.usecase.AddBook(input)
+	savedBook := h.usecase.AddBook(input)
 	fmt.Printf("('%s' by '%s' is saved with ID '%s')\n",
 		savedBook.Title, savedBook.Author, savedBook.ID)
 }

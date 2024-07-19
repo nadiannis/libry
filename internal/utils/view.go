@@ -24,11 +24,16 @@ func BookTable(data []*domain.Book) {
 }
 
 func UserTable(data []*domain.User) {
-	fmt.Printf("%-40s %-15s %-25s\n", "id", "username", "books")
-	fmt.Println(strings.Repeat("-", 80))
+	fmt.Printf("%-40s %-15s %-75s\n", "id", "username", "books")
+	fmt.Println(strings.Repeat("-", 130))
 
 	for _, user := range data {
-		fmt.Printf("%-40s %-15s %-15v\n", user.ID, user.Username, user.Books)
+		var books string
+		for _, book := range user.Books {
+			books += fmt.Sprintf("- %s by %s (ID: %s)\n", book.Title, book.Author, book.ID)
+		}
+
+		fmt.Printf("%-40s %-15s %-75s\n", user.ID, user.Username, books)
 	}
 }
 

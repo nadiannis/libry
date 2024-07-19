@@ -2,6 +2,6 @@ package domain
 
 type User struct {
 	ID       string
-	Name     string
+	Username string
 	Books    []Book
 }

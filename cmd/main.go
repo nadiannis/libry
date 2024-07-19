@@ -53,6 +53,12 @@ func main() {
 			borrowHandler.BorrowBook(parts)
 		case `\r`:
 			fmt.Println("Return a book")
+		case `\c`:
+			if len(parts) != 1 {
+				fmt.Println(`input should be \c`)
+				continue
+			}
+			displayCommands()
 		case `\q`:
 			fmt.Println("bye!")
 			return
@@ -70,5 +76,6 @@ func displayCommands() {
 	\lbb => List all borrowed books
 	\b   => Borrow a book
 	\r   => Return a book
+	\c   => Show all commands
 	\q   => Quit`)
 }

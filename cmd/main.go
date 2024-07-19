@@ -14,9 +14,14 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+
 	bookRepo := repository.NewBookRepository()
 	bookUsecase := usecase.NewBookUsecase(bookRepo)
 	bookHandler := handler.NewBookHandler(bookUsecase)
+
+	userRepo := repository.NewUserRepository()
+	userUsecase := usecase.NewUserUsecase(userRepo)
+	userHandler := handler.NewUserHandler(userUsecase)
 
 	prepopulateBooks(bookHandler)
 
@@ -35,7 +40,7 @@ func main() {
 
 		switch action {
 		case `\lu`:
-			fmt.Println("List all users")
+			userHandler.GetAllUsers(parts)
 		case `\lb`:
 			bookHandler.GetAllBooks(parts)
 		case `\lbb`:

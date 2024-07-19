@@ -6,13 +6,21 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nadiannis/libry/internal/handler"
+	"github.com/nadiannis/libry/internal/repository"
+	"github.com/nadiannis/libry/internal/usecase"
 	"github.com/nadiannis/libry/internal/utils"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	bookRepo := repository.NewBookRepository()
+	bookUsecase := usecase.NewBookUsecase(bookRepo)
+	bookHandler := handler.NewBookHandler(bookUsecase)
 
-	fmt.Println(`===================== LIBRY =====================`)
+	prepopulateBooks(bookHandler)
+
+	fmt.Println("\n======================= LIBRY =======================")
 	displayCommands()
 
 	for {
@@ -29,7 +37,7 @@ func main() {
 		case `\lu`:
 			fmt.Println("List all users")
 		case `\lb`:
-			fmt.Println("List all books")
+			bookHandler.GetAllBooks(parts)
 		case `\lbb`:
 			fmt.Println("List all borrowed books")
 		case `\b`:

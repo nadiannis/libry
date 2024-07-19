@@ -24,8 +24,8 @@ func main() {
 	userHandler := handler.NewUserHandler(userUsecase)
 
 	borrowRepo := repository.NewBorrowRepository()
-	borrowUsecase := usecase.NewBorrowUsecase(borrowRepo)
-	borrowHandler := handler.NewBorrowHandler(borrowUsecase)
+	borrowUsecase := usecase.NewBorrowUsecase(borrowRepo, userRepo, bookRepo)
+	borrowHandler := handler.NewBorrowHandler(scanner, borrowUsecase)
 
 	prepopulateBooks(bookHandler)
 
@@ -50,7 +50,7 @@ func main() {
 		case `\lbb`:
 			borrowHandler.GetAllBorrowedBooks(parts)
 		case `\b`:
-			fmt.Println("Borrow a book")
+			borrowHandler.BorrowBook(parts)
 		case `\r`:
 			fmt.Println("Return a book")
 		case `\q`:

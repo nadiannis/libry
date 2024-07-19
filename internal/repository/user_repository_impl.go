@@ -37,3 +37,14 @@ func (r *UserRepository) GetUserByUsername(username string) (*domain.User, error
 
 	return nil, utils.ErrUserNotFound
 }
+
+func (r *UserRepository) AddBook(userID string, book *domain.Book) (*domain.Book, error) {
+	user, exists := r.db[userID]
+	if !exists {
+		return nil, utils.ErrUserNotFound
+	}
+
+	user.Books = append(user.Books, book)
+
+	return book, nil
+}

@@ -9,6 +9,7 @@ type UserReader interface {
 
 type UserWriter interface {
 	AddUser(user *domain.User) *domain.User
+	AddBook(userID string, book *domain.Book) (*domain.Book, error)
 }
 
 type IUserRepository interface {

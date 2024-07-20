@@ -24,13 +24,18 @@ func BookTable(data []*domain.Book) {
 }
 
 func UserTable(data []*domain.User) {
-	fmt.Printf("%-40s %-15s %-75s\n", "id", "username", "books")
+	fmt.Printf("%-40s %-15s %-75s\n", "id", "username", "books currently borrowed")
 	fmt.Println(strings.Repeat("-", 130))
 
 	for _, user := range data {
 		var books string
-		for _, book := range user.Books {
-			books += fmt.Sprintf("- %s by %s (ID: %s)\n", book.Title, book.Author, book.ID)
+
+		if len(user.Books) == 0 {
+			books = "user does not borrow any books"
+		} else {
+			for _, book := range user.Books {
+				books += fmt.Sprintf("- %s by %s (ID: %s)\n", book.Title, book.Author, book.ID)
+			}
 		}
 
 		fmt.Printf("%-40s %-15s %-75s\n", user.ID, user.Username, books)

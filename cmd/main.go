@@ -54,7 +54,7 @@ func main() {
 			borrowHandler.BorrowBook(parts)
 		case `\r`:
 			borrowHandler.ReturnBook(parts)
-		case `\ud`: // to demonstrate if the user is late returning the book
+		case `\ud`: // just to demonstrate if the user is late returning the book
 			if len(parts) != 4 {
 				fmt.Println(`input should be \ud [borrow-id] [start-date (yyyy-mm-dd)] [end-date (yyyy-mm-dd)]`)
 				continue
@@ -73,7 +73,7 @@ func main() {
 			fmt.Println("bye!")
 			return
 		default:
-			fmt.Println(`action should be '\lu', '\lb', '\lbb', '\b', '\r', or '\q'`)
+			fmt.Println(`action should be '\lu', '\lb', '\lbb', '\b', '\r', '\c', or '\q'`)
 		}
 	}
 }

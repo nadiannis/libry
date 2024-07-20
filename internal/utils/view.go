@@ -38,10 +38,11 @@ func UserTable(data []*domain.User) {
 }
 
 func BorrowedBookTable(data []*domain.Borrow) {
-	fmt.Printf("%-40s %-40s %-40s %-15s %-15s\n", "id", "book id", "user id", "start date", "end date")
-	fmt.Println(strings.Repeat("-", 150))
+	fmt.Printf("%-40s %-40s %-40s %-15s %-15s %-15s\n", "id", "book id", "user id", "start date", "end date", "status")
+	fmt.Println(strings.Repeat("-", 165))
 
 	for _, borrowedBook := range data {
-		fmt.Printf("%-40s %-40s %-40s %-15s %-15s\n", borrowedBook.ID, borrowedBook.BookID, borrowedBook.UserID, FormatDate(borrowedBook.StartDate), FormatDate(borrowedBook.EndDate))
+		fmt.Printf("%-40s %-40s %-40s %-15s %-15s %-15s\n",
+			borrowedBook.ID, borrowedBook.BookID, borrowedBook.UserID, FormatDate(borrowedBook.StartDate), FormatDate(borrowedBook.EndDate), borrowedBook.Status)
 	}
 }

@@ -73,9 +73,9 @@ func (h *BorrowHandler) BorrowBook(parts []string) {
 	}
 	borrowedBook, err := h.usecase.BorrowBook(borrowInput)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("%s, please try again\n", err)
 		return
 	}
 
-	fmt.Printf("(book with ID '%s' is borrowed by '%s')\n", borrowedBook.ID, username)
+	fmt.Printf("(book with ID '%s' is borrowed by '%s')\n", borrowedBook.BookID, username)
 }

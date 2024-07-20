@@ -37,7 +37,7 @@ func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, erro
 	if err != nil {
 		return nil, err
 	}
-	
+
 	user, _ := u.userRepository.GetUserByUsername(input.Username)
 	if user == nil {
 		newUser := &domain.User{
@@ -50,11 +50,12 @@ func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, erro
 	}
 
 	borrow := &domain.Borrow{
-		ID:        uuid.NewString(),
-		UserID:    user.ID,
-		BookID:    book.ID,
-		StartDate: time.Now(),
-		EndDate:   time.Now().AddDate(0, 0, 7),
+		ID:           uuid.NewString(),
+		UserID:       user.ID,
+		BookID:       book.ID,
+		StartDate:    time.Now(),
+		EndDate:      time.Now().AddDate(0, 0, 7),
+		BorrowStatus: domain.BorrowStatus{Status: domain.StatusBorrowed},
 	}
 	borrowedBook, err := u.borrowRepository.AddBorrowedBook(borrow)
 	if err != nil {

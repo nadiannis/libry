@@ -25,7 +25,9 @@ func (r *BorrowRepository) GetAllBorrowedBooks() []*domain.Borrow {
 
 func (r *BorrowRepository) AddBorrowedBook(borrow *domain.Borrow) (*domain.Borrow, error) {
 	for _, borrowedBook := range r.db {
-		if borrow.BookID == borrowedBook.BookID && utils.TimeIsBetween(borrow.StartDate, borrowedBook.StartDate, borrowedBook.EndDate) {
+		if borrowedBook.BookID == borrow.BookID &&
+			borrowedBook.Status == domain.StatusBorrowed &&
+			utils.TimeIsBetween(borrow.StartDate, borrowedBook.StartDate, borrowedBook.EndDate) {
 			return nil, utils.ErrBookCurrentlyBorrowed
 		}
 	}

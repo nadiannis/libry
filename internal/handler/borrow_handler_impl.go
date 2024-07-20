@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 
 	"github.com/nadiannis/libry/internal/dto"
@@ -77,5 +78,50 @@ func (h *BorrowHandler) BorrowBook(parts []string) {
 		return
 	}
 
-	fmt.Printf("(book with ID '%s' is borrowed by '%s')\n", borrowedBook.ID, username)
+	fmt.Printf("(book with ID '%s' is borrowed by '%s')\n", borrowedBook.BookID, username)
+}
+
+func (h *BorrowHandler) ReturnBook(parts []string) {
+	if len(parts) != 1 {
+		fmt.Println(`input should be \r`)
+		return
+	}
+
+	var username, bookID string
+	var err error
+
+	for {
+		username = utils.GetInput(h.scanner, ">> Enter username: ")
+		if username == "" {
+			fmt.Println("username is required")
+			continue
+		}
+		break
+	}
+
+	for {
+		bookID = utils.GetInput(h.scanner, ">> Enter book ID: ")
+		if bookID == "" {
+			fmt.Println("book ID is required")
+			continue
+		}
+		break
+	}
+
+	borrowInput := &dto.BorrowInput{
+		Username: username,
+		BookID:   bookID,
+	}
+	returnedBook, err := h.usecase.ReturnBook(borrowInput)
+	if err != nil {
+		switch {
+		case errors.Is(err, utils.ErrOverdueBookReturned):
+			fmt.Printf("(book with ID '%s' is returned late by '%s')\n", returnedBook.BookID, username)
+		default:
+			fmt.Println(err)
+		}
+		return
+	}
+
+	fmt.Printf("(book with ID '%s' is returned by '%s')\n", returnedBook.BookID, username)
 }

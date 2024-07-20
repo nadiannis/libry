@@ -6,6 +6,7 @@ type BorrowReader interface {
 
 type BorrowWriter interface {
 	BorrowBook(parts []string)
+	ReturnBook(parts []string)
 }
 
 type IBorrowHandler interface {

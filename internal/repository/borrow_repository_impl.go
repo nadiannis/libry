@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"time"
+
 	"github.com/nadiannis/libry/internal/domain"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -25,11 +27,50 @@ func (r *BorrowRepository) GetAllBorrowedBooks() []*domain.Borrow {
 
 func (r *BorrowRepository) AddBorrowedBook(borrow *domain.Borrow) (*domain.Borrow, error) {
 	for _, borrowedBook := range r.db {
-		if borrow.BookID == borrowedBook.BookID && utils.TimeIsBetween(borrow.StartDate, borrowedBook.StartDate, borrowedBook.EndDate) {
+		if borrowedBook.BookID == borrow.BookID &&
+			borrowedBook.Status == domain.StatusBorrowed &&
+			utils.TimeIsBetween(borrow.StartDate, borrowedBook.StartDate, borrowedBook.EndDate) {
 			return nil, utils.ErrBookCurrentlyBorrowed
 		}
 	}
 
 	r.db[borrow.ID] = borrow
 	return borrow, nil
+}
+
+func (r *BorrowRepository) GetBorrowedBook(userID, bookID string) (*domain.Borrow, error) {
+	for _, borrowedBook := range r.db {
+		if borrowedBook.UserID == userID &&
+			borrowedBook.BookID == bookID &&
+			borrowedBook.Status == domain.StatusBorrowed {
+			return borrowedBook, nil
+		}
+	}
+
+	return nil, utils.ErrBorrowedBookNotFound
+}
+
+func (r *BorrowRepository) UpdateStatus(borrowID, status string) (*domain.Borrow, error) {
+	if borrow, exists := r.db[borrowID]; exists {
+		borrow.Status = status
+		r.db[borrowID] = borrow
+		return borrow, nil
+	}
+
+	return nil, utils.ErrBorrowedBookNotFound
+}
+
+func (r *BorrowRepository) UpdateDates(borrowID string, startDate, endDate time.Time) error {
+	if borrow, exists := r.db[borrowID]; exists {
+		if startDate.After(endDate) {
+			startDate, endDate = endDate, startDate
+		}
+
+		borrow.StartDate = startDate
+		borrow.EndDate = endDate
+		r.db[borrowID] = borrow
+		return nil
+	}
+
+	return utils.ErrBorrowedBookNotFound
 }

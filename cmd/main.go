@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/nadiannis/libry/internal/handler"
 	"github.com/nadiannis/libry/internal/repository"
@@ -52,7 +53,16 @@ func main() {
 		case `\b`:
 			borrowHandler.BorrowBook(parts)
 		case `\r`:
-			fmt.Println("Return a book")
+			borrowHandler.ReturnBook(parts)
+		case `\ud`: // to demonstrate if the user is late returning the book
+			if len(parts) != 4 {
+				fmt.Println(`input should be \ud [borrow-id] [start-date (yyyy-mm-dd)] [end-date (yyyy-mm-dd)]`)
+				continue
+			}
+			startDate, _ := time.Parse("2006-01-02", parts[2])
+			endDate, _ := time.Parse("2006-01-02", parts[3])
+			borrowRepo.UpdateDates(parts[1], startDate, endDate)
+			fmt.Println("borrow dates updated")
 		case `\c`:
 			if len(parts) != 1 {
 				fmt.Println(`input should be \c`)

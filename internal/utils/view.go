@@ -24,24 +24,34 @@ func BookTable(data []*domain.Book) {
 }
 
 func UserTable(data []*domain.User) {
-	fmt.Printf("%-40s %-15s %-75s\n", "id", "username", "books")
-	fmt.Println(strings.Repeat("-", 130))
-
 	for _, user := range data {
-		var books string
-		for _, book := range user.Books {
-			books += fmt.Sprintf("- %s by %s (ID: %s)\n", book.Title, book.Author, book.ID)
+		fmt.Printf("%-25s: %-80s\n", "id", user.ID)
+		fmt.Printf("%-25s: %-80s\n", "username", fmt.Sprintf("%s (ID: %s)", user.Username, user.ID))
+
+		if len(user.Books) == 0 {
+			fmt.Printf("%-25s: %-80s\n", "books currently borrowed", "user does not borrow any books")
+		} else {
+			for i, book := range user.Books {
+				if i == 0 {
+					fmt.Printf("%-25s: %-80s\n", "books currently borrowed", fmt.Sprintf("- %s by %s (ID: %s)", book.Title, book.Author, book.ID))
+				} else {
+					fmt.Printf("%-25s: %-80s\n", "", fmt.Sprintf("- %s by %s (ID: %s)", book.Title, book.Author, book.ID))
+				}
+			}
 		}
 
-		fmt.Printf("%-40s %-15s %-75s\n", user.ID, user.Username, books)
+		fmt.Println(strings.Repeat("-", 105))
 	}
 }
 
 func BorrowedBookTable(data []*domain.Borrow) {
-	fmt.Printf("%-40s %-40s %-40s %-15s %-15s\n", "id", "book id", "user id", "start date", "end date")
-	fmt.Println(strings.Repeat("-", 150))
-
 	for _, borrowedBook := range data {
-		fmt.Printf("%-40s %-40s %-40s %-15s %-15s\n", borrowedBook.ID, borrowedBook.BookID, borrowedBook.UserID, FormatDate(borrowedBook.StartDate), FormatDate(borrowedBook.EndDate))
+		fmt.Printf("%-11s: %-80s\n", "id", borrowedBook.ID)
+		fmt.Printf("%-11s: %-80s\n", "book id", borrowedBook.BookID)
+		fmt.Printf("%-11s: %-80s\n", "user id", borrowedBook.UserID)
+		fmt.Printf("%-11s: %-80s\n", "start date", FormatDate(borrowedBook.StartDate))
+		fmt.Printf("%-11s: %-80s\n", "end date", FormatDate(borrowedBook.EndDate))
+		fmt.Printf("%-11s: %-80s\n", "status", borrowedBook.Status)
+		fmt.Println(strings.Repeat("-", 91))
 	}
 }

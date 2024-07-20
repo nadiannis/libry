@@ -48,3 +48,18 @@ func (r *UserRepository) AddBook(userID string, book *domain.Book) (*domain.Book
 
 	return book, nil
 }
+
+func (r *UserRepository) DeleteBookByID(userID, bookID string) error {
+	user, exists := r.db[userID]
+	if !exists {
+		return utils.ErrUserNotFound
+	}
+
+	for i, book := range user.Books {
+		if book.ID == bookID {
+			user.Books = append(user.Books[:i], user.Books[i+1:]...)
+		}
+	}
+
+	return nil
+}

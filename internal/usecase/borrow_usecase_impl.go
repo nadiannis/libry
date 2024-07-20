@@ -8,6 +8,7 @@ import (
 	"github.com/nadiannis/libry/internal/domain"
 	"github.com/nadiannis/libry/internal/dto"
 	"github.com/nadiannis/libry/internal/repository"
+	"github.com/nadiannis/libry/internal/utils"
 )
 
 type BorrowUsecase struct {
@@ -35,7 +36,7 @@ func (u *BorrowUsecase) GetAllBorrowedBooks() []*domain.Borrow {
 func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, error) {
 	book, err := u.bookRepository.GetBookByID(input.BookID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s, please try again", err)
 	}
 
 	user, _ := u.userRepository.GetUserByUsername(input.Username)
@@ -65,4 +66,40 @@ func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, erro
 	u.userRepository.AddBook(user.ID, book)
 
 	return borrowedBook, nil
+}
+
+func (u *BorrowUsecase) ReturnBook(input *dto.BorrowInput) (*domain.Borrow, error) {
+	book, err := u.bookRepository.GetBookByID(input.BookID)
+	if err != nil {
+		return nil, fmt.Errorf("%s, please try again", err)
+	}
+
+	user, err := u.userRepository.GetUserByUsername(input.Username)
+	if err != nil {
+		return nil, fmt.Errorf("%s, you have not borrowed the book yet", err)
+	}
+
+	borrowedBook, err := u.borrowRepository.GetBorrowedBook(user.ID, book.ID)
+	if err != nil {
+		return nil, fmt.Errorf("%s, you are not borrowing the book", err)
+	}
+
+	var returnedBook *domain.Borrow
+	if utils.DateIsAfter(time.Now(), borrowedBook.EndDate) {
+		returnedBook, err = u.borrowRepository.UpdateStatus(borrowedBook.ID, domain.StatusOverdue)
+		if err != nil {
+			return nil, err
+		} else {
+			err = utils.ErrOverdueBookReturned
+		}
+	} else {
+		returnedBook, err = u.borrowRepository.UpdateStatus(borrowedBook.ID, domain.StatusReturned)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	u.userRepository.DeleteBookByID(user.ID, book.ID)
+
+	return returnedBook, err
 }

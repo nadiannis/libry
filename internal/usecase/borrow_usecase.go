@@ -11,6 +11,7 @@ type BorrowReader interface {
 
 type BorrowWriter interface {
 	BorrowBook(input *dto.BorrowInput) (*domain.Borrow, error)
+	ReturnBook(input *dto.BorrowInput) (*domain.Borrow, error)
 }
 
 type IBorrowUsecase interface {

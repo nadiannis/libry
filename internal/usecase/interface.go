@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/nadiannis/libry/internal/domain"
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 )
 
 type BookReader interface {
@@ -11,7 +11,7 @@ type BookReader interface {
 }
 
 type BookWriter interface {
-	AddBook(book *dto.BookInput) *domain.Book
+	AddBook(book *input.BookInput) *domain.Book
 }
 
 type IBookUsecase interface {
@@ -25,7 +25,7 @@ type UserReader interface {
 }
 
 type UserWriter interface {
-	AddUser(user *dto.UserInput) (*domain.User, error)
+	AddUser(user *input.UserInput) (*domain.User, error)
 }
 
 type IUserUsecase interface {
@@ -38,8 +38,8 @@ type BorrowReader interface {
 }
 
 type BorrowWriter interface {
-	BorrowBook(input *dto.BorrowInput) (*domain.Borrow, error)
-	ReturnBook(input *dto.BorrowInput) (*domain.Borrow, error)
+	BorrowBook(input *input.BorrowInput) (*domain.Borrow, error)
+	ReturnBook(input *input.BorrowInput) (*domain.Borrow, error)
 }
 
 type IBorrowUsecase interface {

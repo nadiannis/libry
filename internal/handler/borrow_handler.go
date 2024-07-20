@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/usecase"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -68,7 +68,7 @@ func (h *BorrowHandler) BorrowBook(parts []string) {
 		break
 	}
 
-	borrowInput := &dto.BorrowInput{
+	borrowInput := &input.BorrowInput{
 		Username: username,
 		BookID:   bookID,
 	}
@@ -108,7 +108,7 @@ func (h *BorrowHandler) ReturnBook(parts []string) {
 		break
 	}
 
-	borrowInput := &dto.BorrowInput{
+	borrowInput := &input.BorrowInput{
 		Username: username,
 		BookID:   bookID,
 	}

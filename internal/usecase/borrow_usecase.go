@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nadiannis/libry/internal/domain"
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/repository"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -33,7 +33,7 @@ func (u *BorrowUsecase) GetAllBorrowedBooks() []*domain.Borrow {
 	return u.borrowRepository.GetAllBorrowedBooks()
 }
 
-func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, error) {
+func (u *BorrowUsecase) BorrowBook(input *input.BorrowInput) (*domain.Borrow, error) {
 	book, err := u.bookRepository.GetBookByID(input.BookID)
 	if err != nil {
 		return nil, fmt.Errorf("%s, please try again", err)
@@ -68,7 +68,7 @@ func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, erro
 	return borrowedBook, nil
 }
 
-func (u *BorrowUsecase) ReturnBook(input *dto.BorrowInput) (*domain.Borrow, error) {
+func (u *BorrowUsecase) ReturnBook(input *input.BorrowInput) (*domain.Borrow, error) {
 	book, err := u.bookRepository.GetBookByID(input.BookID)
 	if err != nil {
 		return nil, fmt.Errorf("%s, please try again", err)

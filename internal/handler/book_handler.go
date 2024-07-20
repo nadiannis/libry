@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/usecase"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -37,7 +37,7 @@ func (h *BookHandler) GetAllBooks(parts []string) {
 	utils.BookTable(books)
 }
 
-func (h *BookHandler) AddBook(input *dto.BookInput) {
+func (h *BookHandler) AddBook(input *input.BookInput) {
 	if input.Title == "" {
 		fmt.Println("title is required")
 		return

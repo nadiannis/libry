@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/usecase"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -37,7 +37,7 @@ func (h *UserHandler) GetAllUsers(parts []string) {
 	utils.UserTable(users)
 }
 
-func (h *UserHandler) AddUser(input *dto.UserInput) {
+func (h *UserHandler) AddUser(input *input.UserInput) {
 	if input.Username == "" {
 		fmt.Println("username is required")
 		return

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/handler"
 )
 
-var bookInputs = []*dto.BookInput{
+var bookInputs = []*input.BookInput{
 	{
 		Title:  "Book 1",
 		Author: "Author 1",

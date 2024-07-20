@@ -3,7 +3,7 @@ package usecase
 import (
 	"github.com/google/uuid"
 	"github.com/nadiannis/libry/internal/domain"
-	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/domain/input"
 	"github.com/nadiannis/libry/internal/repository"
 	"github.com/nadiannis/libry/internal/utils"
 )
@@ -22,7 +22,7 @@ func (u *UserUsecase) GetAllUsers() []*domain.User {
 	return u.repository.GetAllUsers()
 }
 
-func (u *UserUsecase) AddUser(input *dto.UserInput) (*domain.User, error) {
+func (u *UserUsecase) AddUser(input *input.UserInput) (*domain.User, error) {
 	foundUser, _ := u.repository.GetUserByUsername(input.Username)
 	if foundUser != nil {
 		return nil, utils.ErrUserExists

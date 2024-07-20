@@ -1,4 +1,4 @@
-package dto
+package input
 
 type BookInput struct {
 	Title  string

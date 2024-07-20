@@ -1,13 +1,13 @@
 package handler
 
-import "github.com/nadiannis/libry/internal/dto"
+import "github.com/nadiannis/libry/internal/domain/input"
 
 type BookReader interface {
 	GetAllBooks(parts []string)
 }
 
 type BookWriter interface {
-	AddBook(input *dto.BookInput)
+	AddBook(input *input.BookInput)
 }
 
 type IBookHandler interface {
@@ -20,7 +20,7 @@ type UserReader interface {
 }
 
 type UserWriter interface {
-	AddUser(input *dto.UserInput)
+	AddUser(input *input.UserInput)
 }
 
 type IUserHandler interface {

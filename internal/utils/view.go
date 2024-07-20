@@ -15,11 +15,11 @@ func GetInput(scanner *bufio.Scanner, prompt string) string {
 }
 
 func BookTable(data []*domain.Book) {
-	fmt.Printf("%-40s %-15s %-15s\n", "id", "title", "author")
-	fmt.Println(strings.Repeat("-", 80))
+	fmt.Printf("%-40s %-20s %-25s\n", "id", "title", "author")
+	fmt.Println(strings.Repeat("-", 85))
 
 	for _, book := range data {
-		fmt.Printf("%-40s %-15s %-25s\n", book.ID, book.Title, book.Author)
+		fmt.Printf("%-40s %-20s %-25s\n", book.ID, book.Title, book.Author)
 	}
 }
 

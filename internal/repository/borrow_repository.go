@@ -4,20 +4,73 @@ import (
 	"time"
 
 	"github.com/nadiannis/libry/internal/domain"
+	"github.com/nadiannis/libry/internal/utils"
 )
 
-type BorrowReader interface {
-	GetAllBorrowedBooks() []*domain.Borrow
-	GetBorrowedBook(userID, bookID string) (*domain.Borrow, error)
+type BorrowRepository struct {
+	db map[string]*domain.Borrow
 }
 
-type BorrowWriter interface {
-	AddBorrowedBook(borrow *domain.Borrow) (*domain.Borrow, error)
-	UpdateStatus(borrowID, status string) (*domain.Borrow, error)
-	UpdateDates(borrowID string, startDate, endDate time.Time) error
+func NewBorrowRepository() IBorrowRepository {
+	return &BorrowRepository{
+		db: make(map[string]*domain.Borrow),
+	}
 }
 
-type IBorrowRepository interface {
-	BorrowReader
-	BorrowWriter
+func (r *BorrowRepository) GetAllBorrowedBooks() []*domain.Borrow {
+	borrowedBooks := make([]*domain.Borrow, 0)
+	for _, borrowedBook := range r.db {
+		borrowedBooks = append(borrowedBooks, borrowedBook)
+	}
+	return borrowedBooks
+}
+
+func (r *BorrowRepository) AddBorrowedBook(borrow *domain.Borrow) (*domain.Borrow, error) {
+	for _, borrowedBook := range r.db {
+		if borrowedBook.BookID == borrow.BookID &&
+			borrowedBook.Status == domain.StatusBorrowed &&
+			utils.TimeIsBetween(borrow.StartDate, borrowedBook.StartDate, borrowedBook.EndDate) {
+			return nil, utils.ErrBookCurrentlyBorrowed
+		}
+	}
+
+	r.db[borrow.ID] = borrow
+	return borrow, nil
+}
+
+func (r *BorrowRepository) GetBorrowedBook(userID, bookID string) (*domain.Borrow, error) {
+	for _, borrowedBook := range r.db {
+		if borrowedBook.UserID == userID &&
+			borrowedBook.BookID == bookID &&
+			borrowedBook.Status == domain.StatusBorrowed {
+			return borrowedBook, nil
+		}
+	}
+
+	return nil, utils.ErrBorrowedBookNotFound
+}
+
+func (r *BorrowRepository) UpdateStatus(borrowID, status string) (*domain.Borrow, error) {
+	if borrow, exists := r.db[borrowID]; exists {
+		borrow.Status = status
+		r.db[borrowID] = borrow
+		return borrow, nil
+	}
+
+	return nil, utils.ErrBorrowedBookNotFound
+}
+
+func (r *BorrowRepository) UpdateDates(borrowID string, startDate, endDate time.Time) error {
+	if borrow, exists := r.db[borrowID]; exists {
+		if startDate.After(endDate) {
+			startDate, endDate = endDate, startDate
+		}
+
+		borrow.StartDate = startDate
+		borrow.EndDate = endDate
+		r.db[borrowID] = borrow
+		return nil
+	}
+
+	return utils.ErrBorrowedBookNotFound
 }

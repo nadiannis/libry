@@ -33,6 +33,11 @@ func (u *BorrowUsecase) GetAllBorrowedBooks() []*domain.Borrow {
 }
 
 func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, error) {
+	book, err := u.bookRepository.GetBookByID(input.BookID)
+	if err != nil {
+		return nil, err
+	}
+	
 	user, _ := u.userRepository.GetUserByUsername(input.Username)
 	if user == nil {
 		newUser := &domain.User{
@@ -42,11 +47,6 @@ func (u *BorrowUsecase) BorrowBook(input *dto.BorrowInput) (*domain.Borrow, erro
 		}
 		user = u.userRepository.AddUser(newUser)
 		fmt.Printf("(user '%s' is created)\n", user.Username)
-	}
-
-	book, err := u.bookRepository.GetBookByID(input.BookID)
-	if err != nil {
-		return nil, err
 	}
 
 	borrow := &domain.Borrow{

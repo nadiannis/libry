@@ -3,18 +3,39 @@ package usecase
 import (
 	"github.com/nadiannis/libry/internal/domain"
 	"github.com/nadiannis/libry/internal/dto"
+	"github.com/nadiannis/libry/internal/repository"
+
+	"github.com/google/uuid"
 )
 
-type BookReader interface {
-	GetAllBooks() []*domain.Book
-	GetBookByID(bookID string) (*domain.Book, error)
+type BookUsecase struct {
+	repository repository.IBookRepository
 }
 
-type BookWriter interface {
-	AddBook(book *dto.BookInput) *domain.Book
+func NewBookUsecase(repository repository.IBookRepository) IBookUsecase {
+	return &BookUsecase{
+		repository: repository,
+	}
 }
 
-type IBookUsecase interface {
-	BookReader
-	BookWriter
+func (u *BookUsecase) GetAllBooks() []*domain.Book {
+	return u.repository.GetAllBooks()
+}
+
+func (u *BookUsecase) AddBook(input *dto.BookInput) *domain.Book {
+	book := &domain.Book{
+		ID:     uuid.NewString(),
+		Title:  input.Title,
+		Author: input.Author,
+	}
+	return u.repository.AddBook(book)
+}
+
+func (u *BookUsecase) GetBookByID(bookID string) (*domain.Book, error) {
+	book, err := u.repository.GetBookByID(bookID)
+	if err != nil {
+		return nil, err
+	}
+
+	return book, nil
 }
